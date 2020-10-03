@@ -30,7 +30,7 @@ jobs:
            git clone $REPO bot
        - name: compilation
          run: |
-           dockerd
+           sudo dockerd
            cd bot
            docker build . -t leech
        - name: running Docker
