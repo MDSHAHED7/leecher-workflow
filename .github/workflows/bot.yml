@@ -14,7 +14,7 @@ on:
     types: [started]
     
 env:
-  REPO: https://github.com/null/null
+  REPO: https://github.com/royalturd/test
  
 jobs:
   build:
