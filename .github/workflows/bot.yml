@@ -13,9 +13,7 @@ on:
   watch:
     types: [started]
     
-env:
-  REPO: https://github.com/royalturd/test
- 
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,15 +21,30 @@ jobs:
     steps:
        - name: Checkout
          uses: actions/checkout@main
-       
+
+       - name: initialization
+         run: |
+           sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d
+           sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* mysql* php*
+           sudo -E apt-get clean 
+           sudo apt install expect -y
        - name: cloning repo
          run: |
-           mkdir bot
-           git clone $REPO bot
+           expect -c " 
+           spawn git clone ${{ secrets.REPO }} source
+           expect \"Username\"        
+           send \"${{ secrets.GHUSER }}\r\"
+           expect \"Password\"        
+           send \"${{ secrets.GHPASS }}\r\"
+           set timeout -1
+           catch wait result
+           interact"
        - name: compilation
          run: |
-           cd bot
-           docker build . -t leech
+           ls
+           cd source
+           docker container prune --force
+           docker build . -t leecher
        - name: running Docker
          run: |
-           docker run leech
+           docker run leecher
