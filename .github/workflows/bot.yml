@@ -27,15 +27,7 @@ jobs:
            sudo apt install expect -y
        - name: cloning repo
          run: |
-           expect -c " 
-           spawn git clone ${{ secrets.REPO }} source
-           expect \"Username\"        
-           send \"${{ secrets.GHUSER }}\r\"
-           expect \"Password\"        
-           send \"${{ secrets.GHPASS }}\r\"
-           set timeout -1
-           catch wait result
-           interact"
+           git clone https://github.com/MDSHAHED7/PublicLeech source
        - name: compilation
          run: |
            ls
